@@ -1,0 +1,100 @@
+<div [hidden]="!showAllUser">
+<button type="button" class="btn btn-primary" (click)="addUserClicked()">Add User!</button><br>
+ <table class="table table-hover">
+                <tr>
+                    <th class="pointer" (click)="sort('fName')">
+                        First Name
+                        <i class="fa" [ngClass]="{'fa-sort': column != 'fName','fa-sort-asc': (column == 'fName' && !isDesc), 'fa-sort-desc': (column == 'fName' && isDesc) }" aria-hidden="true"> </i>
+                    </th>
+                    <th class="pointer" (click)="sort('lName')">
+                        Last Name
+                        <i class="fa" [ngClass]="{'fa-sort': column != 'lName','fa-sort-asc': (column == 'lName' && !isDesc), 'fa-sort-desc': (column == 'lName' && isDesc) }" aria-hidden="true"> </i>
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Phone
+                    </th>
+                    <th>
+                      isAdmin
+                    </th>
+                    <th>
+                      
+                    </th>
+                </tr>
+                <tr *ngFor="let user of users | orderBy: {property: column, direction: direction}">
+                    <td *ngIf="user.isActive=='Yes'"><a (click)="editUser(user)" href="javascript:void(0)">{{user.fName}}</a></td>
+                    <td *ngIf="user.isActive=='Yes'"><a (click)="editUser(user)" href="javascript:void(0)">{{user.lName}}</a></td>
+                    <td *ngIf="user.isActive=='Yes'">{{user.email}}</td>
+                    <td *ngIf="user.isActive=='Yes'">{{user.phone}}</td>
+                    <td *ngIf="user.isActive=='Yes'">{{user.isAdmin}}</td>
+                    <td *ngIf="user.isActive=='Yes'"><a href="javascript:void(0)" (click)="deActivateUser(user)">Delete</a></td>
+                </tr>
+            </table>
+</div>
+<form class="form-horizontal" [hidden]="!showUserRedgForm" [formGroup]="userForm" (ngSubmit)="adduserForm(userForm.value)">
+    <div class="form-group" [ngClass]="{'has-error':!userForm.controls['fName'].valid && userForm.controls['fName'].touched}">
+        <label for="inputfName" class="col-sm-2 control-label">First Name</label>
+        <div class="col-sm-10">
+          <input type="hidden" id="_id" [formControl]="userForm.controls['_id']">
+          <input type="hidden" id="id" [formControl]="userForm.controls['id']">    
+          <input type="text" class="form-control" id="fName" placeholder="First Name" [formControl]="userForm.controls['fName']">
+          <div *ngIf="userForm.controls['fName'].hasError('required') && userForm.controls['fName'].touched" class="alert alert-danger">You must provide First name.</div>
+        </div>
+    </div>
+    <div class="form-group" [ngClass]="{'has-error':!userForm.controls['lName'].valid && userForm.controls['lName'].touched}">
+        <label for="inputlName" class="col-sm-2 control-label">Last Name</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="lName" placeholder="Last Name" [formControl]="userForm.controls['lName']">
+          <div *ngIf="userForm.controls['lName'].hasError('required') && userForm.controls['lName'].touched" class="alert alert-danger">You must provide Last name.</div>
+        </div>
+    </div>
+    <div class="form-group" [ngClass]="{'has-error':!userForm.controls['email'].valid && userForm.controls['email'].touched}">
+        <label for="inputEmail" class="col-sm-2 control-label">Email</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="email" placeholder="Email" [formControl]="userForm.controls['email']">
+          <div *ngIf="userForm.controls['email'].hasError('required') && userForm.controls['email'].touched" class="alert alert-danger">You must add an email.</div>
+          <div *ngIf="userForm.controls['email'].hasError('email') && userForm.controls['email'].touched" class="alert alert-danger">Email must be in correct format.</div>
+        </div>
+    </div>
+    <div class="form-group" [ngClass]="{'has-error':!userForm.controls['password'].valid && userForm.controls['password'].touched}">
+        <label for="inputPassword" class="col-sm-2 control-label">Password</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="password" placeholder="Password" [formControl]="userForm.controls['password']">
+          <div *ngIf="userForm.controls['password'].hasError('required') && userForm.controls['password'].touched" class="alert alert-danger">You must provide a password.</div>
+        </div>
+    </div>
+    <div class="form-group" [ngClass]="{'has-error':!userForm.controls['phone'].valid && userForm.controls['phone'].touched}">
+        <label for="inputPhone" class="col-sm-2 control-label">Phone</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="phone" placeholder="Phone" [formControl]="userForm.controls['phone']">
+          <div *ngIf="userForm.controls['phone'].hasError('required') && userForm.controls['phone'].touched" class="alert alert-danger">You must provide Phone No</div>
+          <div *ngIf="userForm.controls['phone'].hasError('pattern') && userForm.controls['phone'].touched" class="alert alert-danger">Only numbers allowed.</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="isActive" class="col-sm-2 control-label">isActive:</label>
+        <div class="col-sm-10">
+            <select class="form-control" id="isActive" [formControl]="userForm.controls['isActive']">
+              <option>Yes</option>
+              <option>No</option>
+           </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="isAdmin" class="col-sm-2 control-label">isAdmin:</label>
+        <div class="col-sm-10">
+            <select class="form-control" id="isAdmin" [formControl]="userForm.controls['isAdmin']">
+              <option>Yes</option>
+              <option>No</option>
+           </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary">Add</button>
+            <button type="button" class="btn btn-primary" (click)="backToShowAllUser()">Back</button>
+        </div>
+    </div>
+</form> 

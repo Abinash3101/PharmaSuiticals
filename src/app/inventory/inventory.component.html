@@ -1,0 +1,41 @@
+<form class="form-horizontal" [formGroup]="productForm" (ngSubmit)="addProductForm(productForm.value)">
+  <div class="form-group" [ngClass]="{'has-error':!productForm.controls['prodId'].valid && productForm.controls['prodId'].touched}">
+    <label for="inputProductId" class="col-sm-2 control-label">Product Id</label>
+    <div class="col-sm-10">
+      <input type="hidden" id="_id" [formControl]="productForm.controls['_id']">
+      <input type="text" class="form-control" id="prodId" placeholder="Product Id" [formControl]="productForm.controls['prodId']" [readonly]="isProdIdReadOnlyinForm">
+      <div *ngIf="productForm.controls['prodId'].hasError('required') && productForm.controls['prodId'].touched" class="alert alert-danger">You must provide a Product Id</div>
+      <div *ngIf="productForm.controls['prodId'].hasError('pattern') && productForm.controls['prodId'].touched" class="alert alert-danger">You must provide a numeric Product Id</div>
+    </div>
+  </div>
+  <div class="form-group" [ngClass]="{'has-error':!productForm.controls['prodName'].valid && productForm.controls['prodName'].touched}">
+    <label for="inputProductName" class="col-sm-2 control-label">Product Name</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="prodName" placeholder="product Name" [formControl]="productForm.controls['prodName']">
+      <div *ngIf="productForm.controls['prodName'].hasError('required') && productForm.controls['prodName'].touched" class="alert alert-danger">You must provide Product name.</div>
+    </div>
+  </div>
+  <div class="form-group" [ngClass]="{'has-error':!productForm.controls['prodQuantity'].valid && productForm.controls['prodQuantity'].touched}">
+    <label for="inputProductQuantity" class="col-sm-2 control-label">Product Quantity</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" id="prodQuantity" placeholder="Product Quantity" [formControl]="productForm.controls['prodQuantity']">
+      <div *ngIf="productForm.controls['prodQuantity'].hasError('required') && productForm.controls['prodQuantity'].touched" class="alert alert-danger">You must provide Quantity</div>
+      <div *ngIf="productForm.controls['prodQuantity'].hasError('pattern') && productForm.controls['prodQuantity'].touched" class="alert alert-danger">You must provide a numeric value</div>
+    </div>
+  </div>
+  <div class="form-group" [ngClass]="{'has-error':!productForm.controls['prodExpiryDate'].valid && productForm.controls['prodExpiryDate'].touched}">
+    <label for="inputExpiryDate" class="col-sm-2 control-label">Expiry Date</label>
+    <div class="col-sm-10">
+      <div class="input-group date" data-provide="datepicker">
+        <input type="date" class="form-control" [formControl]="productForm.controls['prodExpiryDate']">
+        <div *ngIf="productForm.controls['prodExpiryDate'].hasError('required') && productForm.controls['prodExpiryDate'].touched" class="alert alert-danger">You must provide Expiry date.</div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-primary" [disabled]="!productForm.valid">Add</button>
+      <button class="btn btn-primary" (click)="backToUser()">Back</button>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,111 @@
+<!--grid system-->
+<div class="container">
+    <h1>{{title}}</h1>
+    <div class="row">
+        <nav class="navbar navbar-inverse">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myNav" aria-expanded="false">
+                     <span class="sr-only">Toggle navigation</span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                    </button>
+            <a class="navbar-brand" href="javascript:return(0)">
+                <span class="fa fa-medkit"></span>
+                <span>MyPharma</span>
+            </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="myNav">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="javascript:return(0)" (click)="homeClicked()">
+                            <span class="glyphicon glyphicon-home"></span>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li *ngIf="isAdminUser">
+                        <a href="javascript:return(0)" (click)="userMngtClicked()">
+                            <span class="glyphicon glyphicon-user"></span>
+                            <span>User Mngt</span>
+                        </a>
+                    </li>
+                    <li><a href="#">Log out</a></li>
+                </ul>
+                <ul class="nav navbar-nav visible-xs">
+                    <li><a href="#">Link 2</a></li>
+                    <li><a href="#">Link 3</a></li>
+                    <li><a href="#">Link 4</a></li>
+                    <li><a href="#">Link 5</a></li>
+                    <li><a href="#">Link 6</a></li>
+                    <li><a href="#">Link 7</a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
+    </div>
+    <!--Jumbotron -->
+    <div class="row">
+        <div class="jumbotron">
+            <h2 *ngIf="isAdminUser">Hello, Admin!</h2>
+            <h2 *ngIf="!isAdminUser">Hello, User!</h2>
+            <p *ngIf="isAdminUser">Welcome to MyPharma, You can manage your Product Inventory and Customer here.</p>
+            <p *ngIf="!isAdminUser">Welcome to MyPharma, You can view and search Medicine products here.</p>
+            <button type="button" class="btn btn-primary" (click)="addAProduct()" *ngIf="isAdminUser">Add a Product</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2 col-md-2 col-sm-2 hidden-xs">
+            <div class="thumbnail"> <img alt="100%x200" data-src="holder.js/100%x200" src="https://beagreencompany.com/wp-content/uploads/2016/05/bosphorusestate.com_.png"
+                    data-holder-rendered="true" style="height: 200px; width: 350%; display: block;">
+                <div class="caption">
+                    <h3>Who we are ?</h3>
+                    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget
+                        metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+                    <p><a href="#" class="btn btn-primary" role="button">Know more..</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-10 col-md-10 col-sm-10">
+            <router-outlet></router-outlet>
+            <div style="overflow: auto;height: 500px;" [hidden]="!showProducts">
+                <div class="form-group">
+                    <div class="col-md-6">
+                        <input type="text" [(ngModel)]="searchText" class="form-control" placeholder="Search By Product Name" />
+                    </div>
+                </div><br>
+            <table class="table table-hover" [hidden]="!showProducts">
+                <tr>
+                    <th class="pointer" (click)="sort('prodId')">
+                        Product Id
+                        <i class="fa" [ngClass]="{'fa-sort': column != 'prodId','fa-sort-asc': (column == 'prodId' && !isDesc), 'fa-sort-desc': (column == 'prodId' && isDesc) }" aria-hidden="true"> </i>
+                    </th>
+                    <th class="pointer" (click)="sort('prodName')">
+                        Product Name
+                        <i class="fa" [ngClass]="{'fa-sort': column != 'prodName','fa-sort-asc': (column == 'prodName' && !isDesc), 'fa-sort-desc': (column == 'prodName' && isDesc) }" aria-hidden="true"> </i>
+                    </th>
+                    <th class="pointer" (click)="sort('prodQuantity')">
+                        Quantity Available
+                        <i class="fa" [ngClass]="{'fa-sort': column != 'prodQuantity','fa-sort-asc': (column == 'prodQuantity' && !isDesc), 'fa-sort-desc': (column == 'prodQuantity' && isDesc) }" aria-hidden="true"> </i>
+                    </th>
+                    <th class="pointer" (click)="sort('prodExpiryDate')">
+                        Expiry Date
+                        <i class="fa" [ngClass]="{'fa-sort': column != 'prodExpiryDate','fa-sort-asc': (column == 'prodExpiryDate' && !isDesc), 'fa-sort-desc': (column == 'prodExpiryDate' && isDesc) }" aria-hidden="true"> </i>
+                    </th>
+                    <th *ngIf="isAdminUser"></th>
+                </tr>
+                <tr *ngFor="let prod of products | product: searchText | orderBy: {property: column, direction: direction}">
+                    <td *ngIf="isAdminUser"><a (click)="editProduct(prod.prodId)" href="javascript:void(0)">{{prod.prodId}}</a></td>
+                    <td *ngIf="!isAdminUser">{{prod.prodId}}</td>
+                    <td>{{prod.prodName}}</td>
+                    <td>{{prod.prodQuantity}}</td>
+                    <td>{{prod.prodExpiryDate}}</td>
+                    <td *ngIf="isAdminUser"><a (click)="deleteAProduct(prod)" href="javascript:void(0)">Delete</a></td>
+                </tr>
+            </table>
+            </div>
+        </div>
+    </div>
+</div>
